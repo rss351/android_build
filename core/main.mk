@@ -262,7 +262,7 @@ TARGET_BUILD_JAVA_SUPPORT_LEVEL := platform
 
 # -----------------------------------------------------------------
 # The pdk (Platform Development Kit) build
-include build/core/pdk_config.mk
+# include build/core/pdk_config.mk
 
 # -----------------------------------------------------------------
 ###
@@ -513,10 +513,62 @@ else # ONE_SHOT_MAKEFILE
 # Include all of the makefiles in the system
 #
 
-# Can't use first-makefiles-under here because
-# --mindepth=2 makes the prunes not work.
-subdir_makefiles := \
-	$(shell build/tools/findleaves.py --prune=out --prune=.repo --prune=.git $(subdirs) Android.mk)
+subdir_makefiles := ./bionic/Android.mk \
+./bootable/recovery/Android.mk \
+./build/libs/host/Android.mk \
+./build/target/board/Android.mk \
+./build/tools/Android.mk \
+./external/busybox/Android.mk \
+./external/clang/Android.mk \
+./external/compiler-rt/Android.mk \
+./external/expat/Android.mk \
+./external/freetype/Android.mk \
+./external/gcc-demangle/Android.mk \
+./external/giflib/Android.mk \
+./external/harfbuzz/Android.mk \
+./external/jpeg/Android.mk \
+./external/liblzf/Android.mk \
+./external/libpng/Android.mk \
+./external/llvm/Android.mk \
+./external/openssl/Android.mk \
+./external/protobuf/Android.mk \
+./external/qemu/Android.mk \
+./external/safe-iop/Android.mk \
+./external/skia/Android.mk \
+./external/stlport/Android.mk \
+./external/webp/Android.mk \
+./external/zlib/Android.mk \
+./frameworks/base/Android.mk \
+./frameworks/native/cmds/dumpstate/Android.mk \
+./frameworks/native/cmds/dumpsys/Android.mk \
+./frameworks/native/cmds/sensorservice/Android.mk \
+./frameworks/native/cmds/surfaceflinger/Android.mk \
+./frameworks/native/libs/binder/Android.mk \
+./frameworks/native/libs/cpustats/Android.mk \
+./frameworks/native/libs/gui/Android.mk \
+./frameworks/native/libs/ui/Android.mk \
+./frameworks/native/libs/utils/Android.mk \
+./frameworks/native/opengl/libagl/Android.mk \
+./frameworks/native/opengl/libs/Android.mk \
+./frameworks/native/services/powermanager/Android.mk \
+./frameworks/native/services/sensorservice/Android.mk \
+./frameworks/native/services/surfaceflinger/Android.mk \
+./frameworks/opt/emoji/Android.mk \
+./hardware/libhardware/Android.mk \
+./hardware/ril/libril/Android.mk \
+./hardware/ril/mock-ril/Android.mk \
+./hardware/ril/reference-ril/Android.mk \
+./hardware/ril/rild/Android.mk \
+./hardware/samsung/Android.mk \
+./libcore/Android.mk \
+./prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.6/Android.mk \
+./prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.6/Android.mk \
+./prebuilts/ndk/Android.mk \
+./prebuilts/tools/Android.mk \
+./system/core/Android.mk \
+$(shell build/tools/findleaves.py --prune=out --prune=.repo --prune=.git device Android.mk)
+# ^^^^^ HERE WE ADD ALL THE DEVICES ADDED VIA ANDROID MANIFEST (WE DON'T DO THE SAME WITH THE REST OF THE .MKs 
+#       BECAUSE OTHERWISE THE .py WOULD PULL IN TOO MUCH STUFF WE DON'T WANT TO BUILD
 
 include $(subdir_makefiles)
 
