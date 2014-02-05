@@ -521,11 +521,15 @@ else # ONE_SHOT_MAKEFILE
 # either have to manage patches to the repos to remove them (ugh!) or
 # we simply manage the set of mk files here.
 
+# These are directories we scan for all Android.mk - keeps the
+# manually maintained list below smaller
 subdir_makefile_dirs := bionic bootable build device external hardware hybris libcore system
 
 # Need to skip:
 #  ./frameworks/native/opengl/tests/Android.mk
 #  ./prebuilts/$MANY
+# so for those dirs we explicitly list the Android.mk needed
+# for hybris
 
 subdir_makefiles := \
 ./frameworks/base/Android.mk \
@@ -549,8 +553,8 @@ subdir_makefiles := \
 ./prebuilts/ndk/Android.mk \
 ./prebuilts/tools/Android.mk \
 $(shell build/tools/findleaves.py --prune=out --prune=.repo --prune=.git $(subdir_makefile_dirs) Android.mk)
-# ^^^^^ HERE WE ADD ALL THE DEVICES ADDED VIA ANDROID MANIFEST (WE DON'T DO THE SAME WITH THE REST OF THE .MKs 
-#       BECAUSE OTHERWISE THE .py WOULD PULL IN TOO MUCH STUFF WE DON'T WANT TO BUILD
+
+# End of hybris mods
 
 include $(subdir_makefiles)
 
