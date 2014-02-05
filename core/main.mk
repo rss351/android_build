@@ -513,31 +513,21 @@ else # ONE_SHOT_MAKEFILE
 # Include all of the makefiles in the system
 #
 
-subdir_makefiles := ./bionic/Android.mk \
-./bootable/recovery/Android.mk \
-./build/libs/host/Android.mk \
-./build/target/board/Android.mk \
-./build/tools/Android.mk \
-./external/busybox/Android.mk \
-./external/clang/Android.mk \
-./external/compiler-rt/Android.mk \
-./external/expat/Android.mk \
-./external/freetype/Android.mk \
-./external/gcc-demangle/Android.mk \
-./external/giflib/Android.mk \
-./external/harfbuzz/Android.mk \
-./external/jpeg/Android.mk \
-./external/liblzf/Android.mk \
-./external/libpng/Android.mk \
-./external/llvm/Android.mk \
-./external/openssl/Android.mk \
-./external/protobuf/Android.mk \
-./external/qemu/Android.mk \
-./external/safe-iop/Android.mk \
-./external/skia/Android.mk \
-./external/stlport/Android.mk \
-./external/webp/Android.mk \
-./external/zlib/Android.mk \
+# This set of mk files is hand picked for hybris.
+
+# Some git repos pulled in from our minimal manifest have multiple
+# Android.mk files; some of them we don't need but they're there and
+# they have dependencies outside the minimal set. This means that we
+# either have to manage patches to the repos to remove them (ugh!) or
+# we simply manage the set of mk files here.
+
+subdir_makefile_dirs := bionic bootable build device external hardware hybris libcore system
+
+# Need to skip:
+#  ./frameworks/native/opengl/tests/Android.mk
+#  ./prebuilts/$MANY
+
+subdir_makefiles := \
 ./frameworks/base/Android.mk \
 ./frameworks/native/cmds/dumpstate/Android.mk \
 ./frameworks/native/cmds/dumpsys/Android.mk \
@@ -554,19 +544,11 @@ subdir_makefiles := ./bionic/Android.mk \
 ./frameworks/native/services/sensorservice/Android.mk \
 ./frameworks/native/services/surfaceflinger/Android.mk \
 ./frameworks/opt/emoji/Android.mk \
-./hardware/libhardware/Android.mk \
-./hardware/ril/libril/Android.mk \
-./hardware/ril/mock-ril/Android.mk \
-./hardware/ril/reference-ril/Android.mk \
-./hardware/ril/rild/Android.mk \
-./hardware/samsung/Android.mk \
-./libcore/Android.mk \
 ./prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.6/Android.mk \
 ./prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.6/Android.mk \
 ./prebuilts/ndk/Android.mk \
 ./prebuilts/tools/Android.mk \
-./system/core/Android.mk \
-$(shell build/tools/findleaves.py --prune=out --prune=.repo --prune=.git device Android.mk)
+$(shell build/tools/findleaves.py --prune=out --prune=.repo --prune=.git $(subdir_makefile_dirs) Android.mk)
 # ^^^^^ HERE WE ADD ALL THE DEVICES ADDED VIA ANDROID MANIFEST (WE DON'T DO THE SAME WITH THE REST OF THE .MKs 
 #       BECAUSE OTHERWISE THE .py WOULD PULL IN TOO MUCH STUFF WE DON'T WANT TO BUILD
 
